@@ -10,6 +10,7 @@ from ultralytics import YOLO
 
 from rclpy.qos import qos_profile_sensor_data
 
+from sensor_msgs.msg import Image
 
 
 class ObjectDetector(Node):
@@ -33,6 +34,12 @@ class ObjectDetector(Node):
             10
         )
 
+        self.annotated_pub = self.create_publisher(
+            Image,
+            "/detections/image_annotated",
+            10
+        )
+
         self.get_logger().info("Object detector ready")
 
     def image_callback(self, msg):
@@ -53,6 +60,10 @@ class ObjectDetector(Node):
             msg = String()
             msg.data = str(detected_labels)
             self.publisher.publish(msg)
+
+        annotated = results[0].plot()
+        annotated_msg = self.bridge.cv2_to_imgmsg(annotated, encoding="bgr8")
+        self.annotated_pub.publish(annotated_msg)
 
 
 def main():
