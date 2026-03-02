@@ -8,7 +8,7 @@ Starting the robot:
 - `OLLAMA_HOST=0.0.0.0 ollama serve`
 
 Publish a movement request to the robot:
-- `ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: -0.5}, angular: {z: 0.0}}"`
+- `ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.5}, angular: {z: 0.0}}"`
 
 Start llm-nav (Each must be done in a separate terminal):
 - `ros2 run object_detection detector_node` (Start object detection)
