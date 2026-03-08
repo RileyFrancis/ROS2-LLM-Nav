@@ -258,7 +258,7 @@ class EnhancedTTSNode(Node):
         self._setup_communication()
         
         # RTC topic constants (imported from domain)
-        self.RTC_TOPIC = {"AUDIO_HUB_REQ": 1003}  # Fallback if import fails
+        self.RTC_TOPIC = {"AUDIO_HUB_REQ": "rt/api/audiohub/request"}  # Fallback if import fails
         
         # Log initialization
         self._log_initialization()
@@ -412,7 +412,7 @@ class EnhancedTTSNode(Node):
                 if chunk_idx % 10 == 0:  # Log progress every 10 chunks
                     self.get_logger().info(f"📤 Sent {chunk_idx}/{total_chunks} chunks")
                 
-                time.sleep(0.15)  # Prevent flooding
+                time.sleep(0.2)  # Prevent flooding
             
             # Wait for playback to complete
             self.get_logger().info(f"⏳ Waiting for playback completion ({duration:.1f}s)...")
