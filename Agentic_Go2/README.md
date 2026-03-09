@@ -1,23 +1,60 @@
-Agent_move.py -- one command at a time
+# Agentic Go2
 
-Agent_multistep.py -- adds a planning step to convert request into steps, multiple commands at a time
+LLM-powered movement agent for the Unitree Go2 robot.
 
-Agent_multistep_speech.py -- multiple steps, robot says steps as its being done
+## Scripts
 
-Set up:
+| Script | Description |
+|--------|-------------|
+| `Agent_move.py` | Single command at a time |
+| `Agent_multistep.py` | Plans and executes multiple commands from one request |
+| `Agent_multistep_audio.py` | Multi-step with the robot speaking each step aloud as it executes |
 
-start docker container from docker folder
+## Setup
 
-create .env with OPENAI_API_KEY = "api-key-here"
+**1. Start the Docker container**
+```bash
+cd docker
+docker-compose up
+```
 
-create venv and pip install requirements
+**2. Create a `.env` file in `Agentic_Go2/`**
+```
+OPENAI_API_KEY="your-api-key-here"
+```
 
-for speech only--
-in anouther terminal, connected to same docker container
+**3. Create a venv and install dependencies**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+
+## Audio setup (required for `Agent_multistep_audio.py` only)
+
+In a second terminal, attach to the running Docker container and start the TTS node:
+
+```bash
 ros2 run speech_processor tts_node --ros-args \
--p api_key:="api-key-here" \
--p provider:="elevenlabs" \
--p playback:="robot"
+  -p api_key:="your-elevenlabs-key-here" \
+  -p provider:="elevenlabs" \
+  -p playback:="robot"
+```
 
-run python3 Agent_move.py, Agent_multistep.py or Agent_multistep_speech.py
+Test Audio, in a new terminal
+```
+docker exec -it <docker-container-name> bash 
+ros2 topic pub /tts std_msgs/msg/String "{data: 'Hello, I am Go2'}" --once
+```
 
+
+## Running
+
+```bash
+python3 Agent_move.py
+# or
+python3 Agent_multistep.py
+# or
+python3 Agent_multistep_audio.py
+```
