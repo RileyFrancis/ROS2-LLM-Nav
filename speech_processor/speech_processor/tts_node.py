@@ -54,7 +54,7 @@ class TTSConfig:
     local_playback: bool = False
     use_cache: bool = True
     cache_dir: str = "tts_cache"
-    chunk_size: int = 16 * 1024
+    chunk_size: int = 4096
     audio_quality: str = "standard"  # standard, high
     language: str = "en"
     
@@ -271,7 +271,7 @@ class EnhancedTTSNode(Node):
         self.declare_parameter("local_playback", False)
         self.declare_parameter("use_cache", True)
         self.declare_parameter("cache_dir", "tts_cache")
-        self.declare_parameter("chunk_size", 16384)
+        self.declare_parameter("chunk_size", 4096)
         self.declare_parameter("audio_quality", "standard")
         self.declare_parameter("language", "en")
         self.declare_parameter("stability", 0.5)
@@ -412,7 +412,7 @@ class EnhancedTTSNode(Node):
                 if chunk_idx % 10 == 0:  # Log progress every 10 chunks
                     self.get_logger().info(f"📤 Sent {chunk_idx}/{total_chunks} chunks")
                 
-                time.sleep(0.2)  # Prevent flooding
+                time.sleep(0.2) # Prevent flooding
             
             # Wait for playback to complete
             self.get_logger().info(f"⏳ Waiting for playback completion ({duration:.1f}s)...")

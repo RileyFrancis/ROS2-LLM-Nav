@@ -1,3 +1,4 @@
+import time
 from typing import Annotated, List, TypedDict, Optional, Literal, Dict, Any
 from pydantic import BaseModel, Field
 
@@ -20,7 +21,6 @@ motion.start()
 def walk(duration_s: float = 1.0, speed_mps: float = 0.3) -> str:
     """Make the robot walk for duration_s seconds at speed_mps m/s. Speed is postive when walking forwards, and negtive when walking backwards"""
     motion.walk(duration_s=duration_s, speed_mps=speed_mps)
-    motion.say(f"Walked for {duration_s}s at {speed_mps} meters per second")
     return f"Walked for {duration_s}s at {speed_mps} m/s."
 
 @tool
@@ -28,7 +28,6 @@ def turn_in_place(duration_s: float = 1.0, angular_z: float = 0.8) -> str:
     """Turn in place for duration_s seconds with angular velocity angular_z rad/s. +CCW, -CW."""
     motion.turn_in_place(duration_s=duration_s, angular_z=angular_z)
     direction = "CCW" if angular_z >= 0 else "CW"
-    motion.say(f"Turned {direction} for {duration_s}s at {angular_z} radians per second")
     return f"Turned {direction} for {duration_s}s at {angular_z} rad/s."
 
 tools = [walk, turn_in_place]
@@ -200,8 +199,6 @@ graph = builder.compile()
 if __name__ == "__main__":
     print("Planner+Executor ready! Type 'exit' to quit.\n")
     state: AgentState = {"messages": [], "plan": None, "step_idx": 0}
-    time.sleep(1.0)
-    motion.say("hello! What do you want me to do")
     while True:
         user_input = input("You: ")
         if user_input.lower() in ["exit", "quit", "q"]:
